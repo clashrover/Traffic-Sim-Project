@@ -50,6 +50,36 @@ driver file:
 #### class Junction():
    This class' object simply plots the junction on the screen.
    It has its center point as fields. These junctions will be stored in AVL tree.
+   
+#### class AVLTree
+  It consists of nodes containing left child, right child, height, val_x and val_y.
+  For comparing two nodes first val_x is compared. If val_x are equal then val_y are compared
+  The recursive insertion of this avl tree is based on returning the root of subtree in which the node is inserted.
+   
+   There are 4 cases of imbalance in which rotation is required.
+   ##### Case 1: Left Left 
+    In this the node and child and grandchild are in straight line towards left
+    Simply rotate towards right at node
+    
+   ##### Case 2: Left Right 
+    In this the child is left of node and grandchild is right of child
+    In this first rotate left at child and then rotate right at node.
+    
+   ##### Case 3: Right Right 
+    In this the node and child and grandchild are in straight line towards right
+    Simply left rotate at node
+    
+   ##### Case 4: Right Left
+    In this child is right of node and grandchild is left of child.
+    First right rotate at child and then left rotate at node.
+    
+    
+   
+    
+   
+    
+   
+   
     
 
     

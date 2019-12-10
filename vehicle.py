@@ -19,7 +19,7 @@ class car():
 		self.pos_y = pos_y
 		self.vel_x = vel_x
 		self.vel_y = vel_y
-		self.seq.append(2)
+		self.seq.append(0)
 		self.di = 0
 		self.cars = cars
 

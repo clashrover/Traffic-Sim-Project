@@ -4,6 +4,7 @@ from matplotlib.animation import FuncAnimation
 import random
 import math
 import vehicle
+import AVLTree as tree
 
 class Junction():
 	pos_x=0
@@ -29,10 +30,10 @@ class Junction():
 
 
 class Grid():
-	gridlist = []
-
+	grid = tree.AVLTree()
+	root = None
 	def addJunction(self, junc):
-		self.gridlist.append(junc)
+		self.root = self.grid.insert(self.root, junc.pos_x, junc.pos_y)
 	
 
 

@@ -17,7 +17,8 @@ driver file:
     - This function maintains a safe distance between the edge of road and divider.
     - It works as follows:
        If the car is moving in x direction then a harmonic damping force acts in y direction 
-       to not let the car deviate from the equilibrium positions that i ve kept to be half of the road width.
+       to not let the car deviate from the equilibrium positions that i ve kept to be half 
+       of the road width.
        
   ##### def getState():
     This function tells from where the car is coming towars the junction. The region of detection 
@@ -32,14 +33,16 @@ driver file:
   ##### def takeTurn():
      According to state of approach of a car and the sequence of directions given to it initially 
      in the constructor the car will take turn near the junction/intersection. 
-    -As the random function was not working well with smaller number i decided to give the car sequence of turn it has
-     to take to reach it's destination. 
-    -When we reach a junction, it takes the value seq[i] (where i is the number of junctions it has passed) 
-    to take the necessary turn.
-    -I was not able to give a general function that can make the car turn in specified direction so i 
-    broke up the function into if/else cases. There are total 6 cases with other trivial case.
-     Methode is to first slow down the car using exponential decay force then let it take turn (circular) at 
-     that velocity still slowing the car exponentially but with less rate (I divided magnitude 
+    -As the random function was not working well with smaller number i decided to give 
+    the car sequence of turn it has to take to reach it's destination. 
+    -When we reach a junction, it takes the value seq[i] (where i is the number of 
+    junctions it has passed) to take the necessary turn.
+    -I was not able to give a general function that can make the car turn in specified 
+    direction so i broke up the function into if/else cases. There are total 
+    6 cases with other trivial case.
+     Methode is to first slow down the car using exponential decay force then let it 
+     take turn (circular) at that velocity still slowing the car exponentially but 
+     with less rate (I divided magnitude 
      the tangential velocity by 0.001 at each time step).
      Rest all is use of sin and cos to make the car turn circularly.
      

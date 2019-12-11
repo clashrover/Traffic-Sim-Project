@@ -3,6 +3,7 @@ import numpy as np
 from matplotlib.animation import FuncAnimation
 import random
 import math
+import Map
 
 class car():
 	dt = 0.001
@@ -14,7 +15,9 @@ class car():
 	dt=0.001
 	seq = []
 	cars = []
-	def __init__(self, pos_x, pos_y, vel_x, vel_y,cars):
+	grid = None
+	currentJunc = None
+	def __init__(self, pos_x, pos_y, vel_x, vel_y,cars,grid):
 		self.pos_x = pos_x
 		self.pos_y = pos_y
 		self.vel_x = vel_x
@@ -22,25 +25,29 @@ class car():
 		self.seq.append(0)
 		self.di = 0
 		self.cars = cars
+		self.grid = grid
+
 
 	def reset(self,):
 		self.vel_x=0
 		self.vel_y=0
 
-	# def setList(self,cars):
-	# 	list = cars
+
 
 	def update(self, ):
 		if(self.checkInter()):
 			self.takeTurn()
 		else:
 			self.maintSide()
+			self.currentJunc = self.grid.loadNearJunc(self.pos_x,self.pos_y,self.vel_x,self.vel_y)
 			#self.checkBoundary()
 
 	def checkInter(self, ):
 		return bool(self.pos_y<0.7 and self.pos_y>0.3 and self.pos_x<0.7 and self.pos_x>0.3)
 
 	def getState(self, ):
+		x=self.currentJunc[0]
+		y=self.currentJunc[1]
 		if(self.pos_x<0.35 and self.pos_x>0.34 and abs(self.vel_y)<0.2 and self.vel_x>0.2):
 			self.di = 1
 		elif(self.pos_x>0.65 and self.pos_x<0.66 and abs(self.vel_y)<0.2 and self.vel_x<-0.2):

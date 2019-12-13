@@ -17,16 +17,18 @@ class car():
 	cars = []
 	grid = None
 	currentJunc = None
+	avgVel =0
 	def __init__(self, pos_x, pos_y, vel_x, vel_y,cars,grid):
 		self.pos_x = pos_x
 		self.pos_y = pos_y
 		self.vel_x = vel_x
 		self.vel_y = vel_y
-		self.seq.append(0)
+		self.seq.append(2)
 		self.di = 0
 		self.cars = cars
 		self.grid = grid
-
+		self.currentJunc = self.grid.loadNearJunc(pos_x,pos_y,vel_x,vel_y)
+		self.avgVel = math.sqrt((self.vel_y*self.vel_y)+(self.vel_x*self.vel_x))
 
 	def reset(self,):
 		self.vel_x=0
@@ -43,88 +45,91 @@ class car():
 			#self.checkBoundary()
 
 	def checkInter(self, ):
-		return bool(self.pos_y<0.7 and self.pos_y>0.3 and self.pos_x<0.7 and self.pos_x>0.3)
+		X = self.currentJunc[0]
+		Y = self.currentJunc[1]
+		return bool(self.pos_y<Y+0.2 and self.pos_y>Y-0.2 and self.pos_x<X+0.2 and self.pos_x>X-0.2)
 
 	def getState(self, ):
-		x=self.currentJunc[0]
-		y=self.currentJunc[1]
-		if(self.pos_x<0.35 and self.pos_x>0.34 and abs(self.vel_y)<0.2 and self.vel_x>0.2):
+		X=self.currentJunc[0]
+		Y=self.currentJunc[1]
+		if(self.pos_x<X-0.15 and self.pos_x>X-0.16 and abs(self.vel_y)<0.2 and self.vel_x>0.2):
 			self.di = 1
-		elif(self.pos_x>0.65 and self.pos_x<0.66 and abs(self.vel_y)<0.2 and self.vel_x<-0.2):
+		elif(self.pos_x>X+0.15 and self.pos_x<X+0.16 and abs(self.vel_y)<0.2 and self.vel_x<-0.2):
 			self.di = 2
-		elif(self.pos_y<0.35 and self.pos_y>0.34 and abs(self.vel_x)<0.2 and self.vel_y>0.2):
+		elif(self.pos_y<Y-0.15 and self.pos_y>Y-0.16 and abs(self.vel_x)<0.2 and self.vel_y>0.2):
 			self.di = 3
-		elif(self.pos_y>0.65 and self.pos_y<0.66 and abs(self.vel_x)<0.2 and self.vel_y<-0.2):
+		elif(self.pos_y>Y+0.15 and self.pos_y<Y+0.16 and abs(self.vel_x)<0.2 and self.vel_y<-0.2):
 			self.di = 4
 		
 	def takeTurn(self, ):
 		c = self.seq[0]
 		f = np.ones(2)
 		self.getState()
-		 
+		X=self.currentJunc[0]
+		Y=self.currentJunc[1]
 		if(c==0):
 			if(self.di==1):
-				if(self.pos_x>0.35 and self.pos_x<0.39 and self.pos_y<0.55 and self.pos_y>0.5):
+				if(self.pos_x>X-0.15 and self.pos_x<X-0.11 and self.pos_y<Y+0.05 and self.pos_y>Y):
 					#exponential decay
 					if(abs(self.vel_x)>0.3):
-						f[0]=-75*self.vel_x
+						f[0]=-45*self.vel_x
 						f[1]=-0.25*self.vel_y
 
-				elif(self.pos_x>0.4 and self.pos_x<0.5 and self.pos_y<0.6 and self.pos_y>0.5):
+				elif(self.pos_x>X-0.1 and self.pos_x<X and self.pos_y<Y+0.1 and self.pos_y>Y):
 					#circular force
 					v = math.sqrt((self.vel_y*self.vel_y)+(self.vel_x*self.vel_x))
-					sin = (self.pos_x-0.4)/0.075
-					cos = (0.6-self.pos_y)/0.075
+					sin = (self.pos_x-(X-0.1))/0.075
+					cos = ((Y+0.1)-self.pos_y)/0.075
 					self.vel_x = v*cos
 					self.vel_y = v*sin
 					f[0]=0
 					f[1]=0
 			
 			elif(self.di==2):
-				if(self.pos_x>0.6 and self.pos_x<0.65 and self.pos_y<0.5 and self.pos_y>0.45):
+				if(self.pos_x>X+0.1 and self.pos_x<X+0.15 and self.pos_y<Y and self.pos_y>Y-0.05):
 					#exponential decay
 					if(abs(self.vel_x)>0.3):
-						f[0]=-75*self.vel_x
+						f[0]=-45*self.vel_x
 						f[1]=-0.25*self.vel_y
 
-				elif(self.pos_x>0.5 and self.pos_x<0.6 and self.pos_y<0.5 and self.pos_y>0.4):
+				elif(self.pos_x>X and self.pos_x<X+0.1 and self.pos_y<Y and self.pos_y>Y-0.1):
 					#circular force
 					v = math.sqrt((self.vel_y*self.vel_y)+(self.vel_x*self.vel_x))
-					sin = (0.6-self.pos_x)/0.075
-					cos = (self.pos_y-0.4)/0.075
+					sin = ((X+0.1)-self.pos_x)/0.075
+					cos = (self.pos_y-(Y-0.1))/0.075
 					self.vel_x = -1*v*cos
 					self.vel_y = -1*v*sin
 					f[0]=0
 					f[1]=0
 			
 			elif(self.di==3):
-				if(self.pos_x>0.4 and self.pos_x<0.5 and self.pos_y<0.4 and self.pos_y>0.35):
+				if(self.pos_x>X-0.1 and self.pos_x<X and self.pos_y<Y-0.1 and self.pos_y>Y-0.15):
 					#exponential decay
 					#if(abs(self.vel_y)>0.3):
-						f[1]=-75*self.vel_y
+						f[1]=-45*self.vel_y
 						f[0]=-25*self.vel_x
 
-				elif(self.pos_x>0.4 and self.pos_x<0.5 and self.pos_y<0.5 and self.pos_y>0.4):
+				elif(self.pos_x>X-0.1 and self.pos_x<X and self.pos_y<Y and self.pos_y>Y-0.1):
 					#circular force
 					v = math.sqrt((self.vel_y*self.vel_y)+(self.vel_x*self.vel_x))
-					sin = (self.pos_x-0.4)/0.075
-					cos = (self.pos_y-0.4)/0.075
+					sin = (self.pos_x-(X-0.1))/0.075
+					cos = (self.pos_y-(Y-0.1))/0.075
 					self.vel_x = -1*v*cos
 					self.vel_y = v*sin
 					f[0]=0
 					f[1]=0
 
 			elif(self.di==4):
-				if(self.pos_x>0.5 and self.pos_x<0.6 and self.pos_y>0.6 and self.pos_y<0.65):
+				if(self.pos_x>X and self.pos_x<X+0.1 and self.pos_y>Y+0.1 and self.pos_y<Y+0.15):
 					#exponential decay
-						f[1]=-75*self.vel_y
+						f[1]=-45*self.vel_y
 						f[0]=-25*self.vel_x
 
-				elif(self.pos_x>0.5 and self.pos_x<0.6 and self.pos_y<0.6 and self.pos_y>0.5):
+				elif(self.pos_x>X and self.pos_x<X+0.1 and self.pos_y<Y+0.1 and self.pos_y>Y):
 					#circular force
 					v = math.sqrt((self.vel_y*self.vel_y)+(self.vel_x*self.vel_x))
-					sin = (0.6-self.pos_x)/0.075
-					cos = (0.6-self.pos_y)/0.075
+					sin = ((X+0.1)-self.pos_x)/0.075
+					cos = ((Y+0.1)-self.pos_y)/0.075
 					self.vel_x = v*cos
 					self.vel_y = -1*v*sin
 					f[0]=0
@@ -136,60 +141,88 @@ class car():
 
 		elif(c==2):
 			if(self.di == 1):
-				if(self.pos_x>0.35 and self.pos_x<0.38 and self.pos_y<0.55 and self.pos_y>0.5):
+				if(self.pos_x>X-0.15 and self.pos_x<X-0.12 and self.pos_y<Y+0.05 and self.pos_y>Y):
 					#exponential decay
-					f[0]=-90*self.vel_x
-					f[1]=-0.25*self.vel_y
-				elif(self.pos_x>0.39 and self.pos_x<0.55 and self.pos_y>0.4 and self.pos_y<0.55 ):
+					if abs(self.vel_x)>1:
+						f[0]=-60*self.vel_x
+						f[1]=-0.25*self.vel_y
+					elif abs(self.vel_x)<1:
+						self.vel_x += 2*self.vel_x
+
+				elif(self.pos_x>X-0.11 and self.pos_x<X+0.05 and self.pos_y>Y-0.1 and self.pos_y<Y+0.05):
 					#circular force
 					v = math.sqrt((self.vel_y*self.vel_y)+(self.vel_x*self.vel_x))
-					v=v/1.0001
-					sin = (self.pos_x-0.4)/0.125
-					cos = (self.pos_y-0.4)/0.125
+					if v>1:
+						v=v/1.0001
+					else:
+						v+= 1.5*v
+					sin = (self.pos_x-(X-0.1))/0.125
+					cos = (self.pos_y-(Y-0.1))/0.125
 					self.vel_x = v*cos
 					self.vel_y = -1*v*sin
 					f[0]=0
 					f[1]=0
 
 			elif(self.di == 2):
-				if(self.pos_x<0.65 and self.pos_x>0.62 and self.pos_y<0.5 and self.pos_y>0.45):
+				if(self.pos_x<X+0.15 and self.pos_x>X+0.12 and self.pos_y<Y and self.pos_y>Y-0.05):
 					#exponential decay
-					f[0]=-90*self.vel_x
-					f[1]=-0.25*self.vel_y
-				elif(self.pos_x<0.61 and self.pos_x>0.45 and self.pos_y>0.45 and self.pos_y<0.6 ):
+					if abs(self.vel_x)>1:
+						f[0]=-60*self.vel_x
+						f[1]=-0.25*self.vel_y
+					elif abs(self.vel_x)<1:
+						self.vel_x += 2*self.vel_x
+					
+				elif(self.pos_x<X+0.11 and self.pos_x>X-0.05 and self.pos_y>Y-0.05 and self.pos_y<Y+0.1 ):
 					#circular force
 					v = math.sqrt((self.vel_y*self.vel_y)+(self.vel_x*self.vel_x))
-					v=v/1.0001
-					sin = (0.6-self.pos_x)/0.125
-					cos = (0.6-self.pos_y)/0.125
+					if v>1:
+						v=v/1.0001
+					else:
+						v+= 1.5*v
+					sin = ((X+0.1)-self.pos_x)/0.125
+					cos = ((Y+0.1)-self.pos_y)/0.125
 					self.vel_x = -1*v*cos
 					self.vel_y = v*sin
 					f[0]=0
 					f[1]=0
 
 			elif(self.di == 3):
-				if(self.pos_x<0.5 and self.pos_x>0.45 and self.pos_y<0.4 and self.pos_y>0.35):
-					f[1]=-50*self.vel_y
-					f[0]=-0.25*self.vel_x
-				elif(self.pos_x>0.45 and self.pos_x<0.6 and self.pos_y>0.4 and self.pos_y<0.55):
+				if(self.pos_x<X and self.pos_x>X-0.05 and self.pos_y<Y-0.1 and self.pos_y>Y-0.15):
+					if abs(self.vel_y)>1:
+						f[1]=-50*self.vel_y
+						f[0]=-0.25*self.vel_x
+					elif abs(self.vel_y) <1:
+						self.vel_y += 2*self.vel_y
+
+				elif(self.pos_x>X-0.05 and self.pos_x<X+0.1 and self.pos_y>Y-0.1 and self.pos_y<Y+0.05):
 					v = math.sqrt((self.vel_y*self.vel_y)+(self.vel_x*self.vel_x))
-					v=v/1.0001
-					sin = (0.6-self.pos_x)/0.125
-					cos = (self.pos_y-0.4)/0.125
+					if v>1:
+						v=v/1.0001
+					else:
+						v+= 1.5*v
+					sin = ((X+0.1)-self.pos_x)/0.125
+					cos = (self.pos_y-(Y-0.1))/0.125
 					self.vel_x = v*cos
 					self.vel_y = v*sin
 					f[0]=0
 					f[1]=0
 
 			elif(self.di == 4):
-				if(self.pos_x>0.5 and self.pos_x<0.55 and self.pos_y>0.6 and self.pos_y<0.65):
-					f[1]=-50*self.vel_y
-					f[0]=-0.25*self.vel_x
-				elif(self.pos_x<0.55 and self.pos_x>0.4 and self.pos_y<0.6 and self.pos_y>0.45):
+				if(self.pos_x>X and self.pos_x<X+0.05 and self.pos_y>Y+0.1 and self.pos_y<Y+0.15):
+					if abs(self.vel_y)>1:
+						f[1]=-50*self.vel_y
+						f[0]=-0.25*self.vel_x
+					elif abs(self.vel_y) <1:
+						self.vel_y += 2*self.vel_y
+
+				elif(self.pos_x<X+0.05 and self.pos_x>X-0.1 and self.pos_y<Y+0.1 and self.pos_y>Y-0.05):
 					v = math.sqrt((self.vel_y*self.vel_y)+(self.vel_x*self.vel_x))
-					v=v/1.0001
-					sin = (self.pos_x-0.4)/0.125
-					cos = (0.6-self.pos_y)/0.125
+					if v>1:
+						v=v/1.0001
+					else:
+						v+= 1.5*v
+					sin = (self.pos_x-(X-0.1))/0.125
+					cos = ((Y+0.1)-self.pos_y)/0.125
 					self.vel_x = -1*v*cos
 					self.vel_y = -1*v*sin
 					f[0]=0
@@ -211,16 +244,33 @@ class car():
 		f = np.ones(2)
 		f[0]=0
 		f[1]=0
-		if(self.vel_y<0.5 and self.vel_y>-0.5 and self.pos_y>0.5 and self.pos_y<0.55):
-			f[1]=100*(0.525-self.pos_y)-800*self.vel_y;
-		elif(self.vel_y<0.5 and self.vel_y>-0.5 and self.pos_y<0.5 and self.pos_y>0.45):
-			f[1]=100*(0.475-self.pos_y)-800*self.vel_y;
+		X = self.currentJunc[0]
+		Y = self.currentJunc[1]
+		if(abs(self.vel_y)<0.2 and self.pos_y>Y and self.pos_y<Y+0.05):
+			self.pos_y=Y+0.025
+			#f[1]=1000*((Y+0.025)-self.pos_y)-800*self.vel_y
+			f[1]=-800*self.vel_y
+			f[0]=20*(self.avgVel-abs(self.vel_x))
 
-		elif(self.vel_x<0.5 and self.vel_x>-0.5):
-			if(self.pos_x>0.45 and self.pos_x<0.5):
-				f[0]=100*(0.475-self.pos_x)-800*self.vel_x
-			elif((self.pos_x>0.5 and self.pos_x<0.55)):
-				f[0]=100*(0.525-self.pos_x)-800*self.vel_x
+		elif(abs(self.vel_y)<0.2 and self.pos_y<Y and self.pos_y>Y-0.05):
+			self.pos_y=Y-0.025
+			#f[1]=1000*((Y-0.025)-self.pos_y)-800*self.vel_y;
+			f[1]=-800*self.vel_y
+			f[0]=-20*(self.avgVel-abs(self.vel_x))
+
+		elif(abs(self.vel_x)<0.2):
+			if(self.pos_x>X-0.05 and self.pos_x<X):
+				self.pos_x=X-0.025
+				f[0]=-800*self.vel_x
+				f[1]=20*(self.avgVel - abs(self.vel_y))
+				#f[0]=100*((X-0.025)-self.pos_x)-800*self.vel_x
+			elif((self.pos_x>X and self.pos_x<X+0.05)):
+				self.pos_x=X+0.025
+				f[0]=-800*self.vel_x
+				f[1]=-20*(self.avgVel - abs(self.vel_y))
+				#f[0]=100*((X+0.025)-self.pos_x)-800*self.vel_x
+				
+				
 
 
 

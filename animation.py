@@ -9,7 +9,7 @@ import Map
 
 
 
-n = 3               # Number of cars
+n = 1               # Number of cars
 m = np.ones(n)      # car massess
 x = np.zeros((n,2)) # Particle positions (x and y for ith particle in x[i,0], x[i,1])
 
@@ -18,16 +18,21 @@ fig, ax = plt.subplots()
 points, = ax.plot(x[:,0], x[:,1], 'o')
 grid = Map.Grid()
 grid.addJunction(Map.Junction(0.5,0.5))
-grid.addJunction(Map.Junction(1.5,0.5))
 grid.addJunction(Map.Junction(0.5,1.5))
+grid.addJunction(Map.Junction(0.5,2.5))
+grid.addJunction(Map.Junction(1.5,0.5))
 grid.addJunction(Map.Junction(1.5,1.5))
+grid.addJunction(Map.Junction(1.5,2.5))
+grid.addJunction(Map.Junction(2.5,0.5))
+grid.addJunction(Map.Junction(2.5,1.5))
+grid.addJunction(Map.Junction(2.5,2.5))
 
 
 cars = []   #list of cars
 # initialize all the cars
-cars.append(vehicle.car(0, 0.525, 5, 0,cars,grid))
-cars.append(vehicle.car(1, 0.475, -5, 0,cars,grid))
-cars.append(vehicle.car(0.475, 0, 0, 5,cars,grid))
+cars.append(vehicle.car(1, 0.475, -4, 0,cars,grid))
+#cars.append(vehicle.car(1, 0.475, -5, 0,cars,grid))
+# cars.append(vehicle.car(0.475, 0, 0, 5,cars,grid))
 # list[0].setList(list)
 # list[1].setList(list)
 
@@ -54,8 +59,8 @@ def step():
 # 	obj.setGrid(grid)
 
 def init():
-    ax.set_xlim(0,2)
-    ax.set_ylim(0,2)
+    ax.set_xlim(0,3)
+    ax.set_ylim(0,3)
     ax.set_aspect('equal')
     return points,
 

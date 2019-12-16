@@ -136,7 +136,14 @@ class AVLTree(object):
 
     def searchNear(self, root, x , y, velx, vely): #please call this function in specific region
         junc = np.ones(2)
+        
+        if root == None:
+            junc[0] = None
+            junc[1] = None
+            return junc
+
         if velx>0.1 and abs(vely)<0.1:
+
 
             if root.val_x-x >0 and root.val_x-x > 1:
                 return self.searchNear(root.left,x,y,velx, vely)
@@ -219,6 +226,7 @@ class AVLTree(object):
                 else:
                     return self.searchNear(root.left,x,y,velx,vely)
 
+       
 
         
 # code referenced from geek for geeks. Studied and modified for the project

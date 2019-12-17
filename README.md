@@ -29,6 +29,9 @@ Youtube link: https://www.youtube.com/watch?v=xvKQXMO9AUk
   def searchNear(self, root, x , y, velx, vely):
     this function will detect the nearby junction else it will return an array with null values.
   
+![Screenshot from 2019-12-17 11-02-13](https://user-images.githubusercontent.com/46003431/70967625-c2102580-20bc-11ea-8ae0-f7c98c5a3b3b.png)
+
+![Screenshot from 2019-12-17 11-02-09](https://user-images.githubusercontent.com/46003431/70967623-c2102580-20bc-11ea-8095-80a60b4b2dd0.png)
 
 ### Work Done Till 9/12/2019
 

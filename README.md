@@ -4,6 +4,8 @@ A traffic simulator using Matplotlib and numpy. Under development, will consist 
 
 ### Work done till 16/12/2019
 
+Youtube link: https://www.youtube.com/watch?v=xvKQXMO9AUk
+
 #### class car():
   -Using AVLTree for succesfully loading of nearby junction.
   -Parameter tuning for smooth turning around the curve.
@@ -27,11 +29,6 @@ A traffic simulator using Matplotlib and numpy. Under development, will consist 
   def searchNear(self, root, x , y, velx, vely):
     this function will detect the nearby junction else it will return an array with null values.
   
-
-
-
-
-
 
 ### Work Done Till 9/12/2019
 

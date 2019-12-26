@@ -1,9 +1,10 @@
 import numpy as np
 
 class Node(object): 
-    def __init__(self, val_x,val_y): 
+    def __init__(self, val_x,val_y,val): 
         self.val_x = val_x 
         self.val_y = val_y
+        self.val = val
         self.left = None
         self.right = None
         self.height = 1
@@ -11,19 +12,19 @@ class Node(object):
 class AVLTree(object): 
   
     # new root of subtree. 
-    def insert(self, root, key_x, key_y):
+    def insert(self, root, key_x, key_y, val):
         # Normal BST 
         if not root:
-            return Node(key_x,key_y) 
+            return Node(key_x,key_y,val) 
         elif key_x < root.val_x:
-            root.left = self.insert(root.left, key_x, key_y)
+            root.left = self.insert(root.left, key_x, key_y, val)
         elif key_x == root.val_x:
         	if key_y < root.val_y:
-        		root.left = self.insert(root.left, key_x, key_y)
+        		root.left = self.insert(root.left, key_x, key_y, val)
         	else:
-        		root.right = self.insert(root.right, key_x, key_y)
+        		root.right = self.insert(root.right, key_x, key_y, val)
         else:
-            root.right = self.insert(root.right, key_x, key_y) 
+            root.right = self.insert(root.right, key_x, key_y, val) 
   
         # Update the height of above node 
         root.height = 1 + max(self.getHeight(root.left), 
@@ -135,12 +136,9 @@ class AVLTree(object):
         self.preOrder(root.right) 
 
     def searchNear(self, root, x , y, velx, vely): #please call this function in specific region
-        junc = np.ones(2)
         
         if root == None:
-            junc[0] = None
-            junc[1] = None
-            return junc
+            return None
 
         if velx>0.1 and abs(vely)<0.1:
 
@@ -150,9 +148,7 @@ class AVLTree(object):
 
             if root.val_x-x >0 and root.val_x-x <1:
                 if abs(root.val_y-y)<0.1:
-                    junc[0]= root.val_x
-                    junc[1]= root.val_y
-                    return junc
+                    return root.val
 
                 else:
                     if root.val_y < y :
@@ -172,9 +168,7 @@ class AVLTree(object):
 
             if x-root.val_x >0 and x-root.val_x <1:
                 if abs(root.val_y-y)<0.1:
-                    junc[0]= root.val_x
-                    junc[1]= root.val_y
-                    return junc
+                    return root.val
 
                 else:
                     if root.val_y < y :
@@ -191,9 +185,7 @@ class AVLTree(object):
 
             if abs(root.val_x-x) < 0.1:
                 if root.val_y-y < 1 and root.val_y-y>0:
-                    junc[0]=root.val_x
-                    junc[1]=root.val_y
-                    return junc
+                    return root.val
 
                 else:
                     if root.val_y>y :
@@ -210,9 +202,7 @@ class AVLTree(object):
         if vely<-0.1 and abs(velx) <0.1:
             if abs(root.val_x-x) < 0.1:
                 if y-root.val_y < 1 and y-root.val_y>0:
-                    junc[0]=root.val_x
-                    junc[1]=root.val_y
-                    return junc
+                    return root.val
 
                 else:
                     if root.val_y>y :

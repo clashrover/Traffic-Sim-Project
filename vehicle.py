@@ -33,33 +33,36 @@ class car():
 		self.keepGoing = False
 
 	def reset(self,):
-		self.vel_x=0
-		self.vel_y=0
+		self.vel_x += 1
+		self.vel_y += 1
 
 	def setSeq(self,i):
 		self.ss = i
 
 	def update(self, ):
-		if not self.currentJunc.any():
+		if not self.currentJunc:
 			self.pos_x += self.vel_x*self.dt;
 			self.pos_y += self.vel_y*self.dt;
 			return
 
 		if(self.checkInter()):
-			self.takeTurn()
+			if self.currentJunc.checkSignal(self.state):
+				self.reset
+			else:	
+				self.takeTurn()
 		else:
 			self.maintSide()
 			self.currentJunc = self.grid.loadNearJunc(self.pos_x,self.pos_y,self.vel_x,self.vel_y)
 				
 
 	def checkInter(self, ):
-		X = self.currentJunc[0]
-		Y = self.currentJunc[1]
+		X = self.currentJunc.center_x
+		Y = self.currentJunc.center_y
 		return bool(self.pos_y<Y+0.2 and self.pos_y>Y-0.2 and self.pos_x<X+0.2 and self.pos_x>X-0.2)
 
 	def getState(self, ):
-		X=self.currentJunc[0]
-		Y=self.currentJunc[1]
+		X=self.currentJunc.center_x
+		Y=self.currentJunc.center_y
 		if(self.pos_x<X-0.15 and self.pos_x>X-0.16 and abs(self.vel_y)<0.2 and self.vel_x>0.2):
 			self.state = 1
 		elif(self.pos_x>X+0.15 and self.pos_x<X+0.16 and abs(self.vel_y)<0.2 and self.vel_x<-0.2):
@@ -73,8 +76,8 @@ class car():
 		c = self.ss
 		f = np.ones(2)
 		self.getState()
-		X=self.currentJunc[0]
-		Y=self.currentJunc[1]
+		X=self.currentJunc.center_x
+		Y=self.currentJunc.center_y
 		if(c==0):
 			if(self.state==1):
 				if(self.pos_x>X-0.15 and self.pos_x<X-0.11 and self.pos_y<Y+0.05 and self.pos_y>Y):
@@ -251,8 +254,8 @@ class car():
 		f = np.ones(2)
 		f[0]=0
 		f[1]=0
-		X = self.currentJunc[0]
-		Y = self.currentJunc[1]
+		X = self.currentJunc.center_x
+		Y = self.currentJunc.center_y
 		if(abs(self.vel_y)<0.2 and self.pos_y>Y and self.pos_y<Y+0.05):
 			self.pos_y=Y+0.025
 			#f[1]=1000*((Y+0.025)-self.pos_y)-800*self.vel_y

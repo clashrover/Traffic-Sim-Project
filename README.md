@@ -1,7 +1,39 @@
 # Traffic-Sim-Project
 A traffic simulator using Matplotlib and numpy. Under development, will consist of cars that run as seperate processes.
 
-Work Done Till 9/12/2019
+
+### Work done till 16/12/2019
+
+Youtube link: https://www.youtube.com/watch?v=xvKQXMO9AUk
+
+#### class car():
+  -Using AVLTree for succesfully loading of nearby junction.
+  -Parameter tuning for smooth turning around the curve.
+  -A new field currentJunction has been added. This field is returned by loadNearJunc(posx,posy,velx,vely) of the grid object.
+  -Parameters for turning are loaded from currentJunction.
+  
+#### class Grid():
+  grid = tree.AVLTree()
+	root = None
+	
+  -def addJunction(self, junc):
+		self.root = self.grid.insert(self.root, junc.pos_x, junc.pos_y)
+  
+  -def loadNearJunc(self, posx, posy, velx, vely):
+      junc = np.ones(2)
+      junc = self.grid.searchNear(self.root,posx,posy,velx,vely)
+      return junc
+      
+
+#### class AVLTree():
+  def searchNear(self, root, x , y, velx, vely):
+    this function will detect the nearby junction else it will return an array with null values.
+  
+![Screenshot from 2019-12-17 11-02-13](https://user-images.githubusercontent.com/46003431/70967625-c2102580-20bc-11ea-8ae0-f7c98c5a3b3b.png)
+
+![Screenshot from 2019-12-17 11-02-09](https://user-images.githubusercontent.com/46003431/70967623-c2102580-20bc-11ea-8095-80a60b4b2dd0.png)
+
+### Work Done Till 9/12/2019
 
 driver file:
 #### animation.py
